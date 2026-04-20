@@ -17,6 +17,14 @@ class Zone(ABC):
         self.connections: list['Connection'] = []
         self.garage: list['Drone'] = []
 
+    def find_neighbors(self) -> list['Zone']:
+        valid_neighbors = []
+        for c in self.connections:
+            opposite_zone = c.get_opposite_zone(self)
+            if not opposite_zone.zone_type == "blocked":
+                valid_neighbors.append(opposite_zone)
+        return valid_neighbors
+
 
 class NormalZone(Zone):
     def __init__(self, designation: str, name: str, x: int, y: int):
@@ -54,6 +62,9 @@ class Connection():
         self.zone_a = zone_a
         self.zone_b = zone_b
 
+    def get_opposite_zone(self, curr_zone: Zone) -> Zone:
+        return self.zone_b if curr_zone == self.zone_a else self.zone_a
+
 
 @dataclass
 class GameMap:
@@ -65,5 +76,10 @@ class GameMap:
 
 
 class Drone:
-    def __init__(self):
-        self.name: str = "Drone"
+    def __init__(self, id: str):
+        self.name = "D"
+        self.id = id
+        self.full_tag: str = f"{self.name}{self.id}"
+        self.current_zone: Zone = None
+        self.target_zone: Zone = None
+        self.transit_timer: int = 0
