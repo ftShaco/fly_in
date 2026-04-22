@@ -1,0 +1,106 @@
+# THE PRISM - SWARM SPLITTING SHOWCASE
+# Purpose: Force 40 drones to scatter across a highly bottlenecked 
+# diamond-shaped network to minimize total turn count.
+
+nb_drones: 40
+
+# === THE SOURCE ===
+start_hub: start 0 0 [color=green max_drones=40]
+
+# === LAYER 1: First Dispersion ===
+# The swarm breaks into 3 main streams
+hub: L1_top 2 3 [max_drones=2 color=cyan]
+hub: L1_mid 2 0 [max_drones=2 color=cyan]
+hub: L1_bot 2 -3 [max_drones=2 color=cyan]
+
+# === LAYER 2: The Great Split ===
+# The streams fracture into 6 parallel micro-lanes
+hub: L2_T1 4 5 [max_drones=1 color=blue]
+hub: L2_T2 4 2 [max_drones=1 color=blue]
+hub: L2_M1 4 1 [max_drones=1 color=blue]
+hub: L2_M2 4 -1 [max_drones=1 color=blue]
+hub: L2_B1 4 -2 [max_drones=1 color=blue]
+hub: L2_B2 4 -5 [max_drones=1 color=blue]
+
+# === LAYER 3: The Flow Modulators ===
+# Outer lanes are slow (restricted), inner lanes are fast (priority)
+hub: L3_T1 6 5 [zone=restricted max_drones=1 color=purple]
+hub: L3_T2 6 2 [zone=restricted max_drones=1 color=purple]
+hub: L3_M1 6 1 [zone=priority max_drones=1 color=gold]
+hub: L3_M2 6 -1 [zone=priority max_drones=1 color=gold]
+hub: L3_B1 6 -2 [zone=restricted max_drones=1 color=purple]
+hub: L3_B2 6 -5 [zone=restricted max_drones=1 color=purple]
+
+# === LAYER 4: The Weave ===
+# Drones must cross paths to re-align for the exit
+hub: L4_T1 8 4 [max_drones=1 color=blue]
+hub: L4_T2 8 2 [max_drones=1 color=blue]
+hub: L4_M 8 0 [max_drones=2 color=orange]
+hub: L4_B1 8 -2 [max_drones=1 color=blue]
+hub: L4_B2 8 -4 [max_drones=1 color=blue]
+
+# === LAYER 5: Re-convergence ===
+hub: L5_top 10 3 [max_drones=2 color=cyan]
+hub: L5_mid 10 0 [max_drones=3 color=cyan]
+hub: L5_bot 10 -3 [max_drones=2 color=cyan]
+
+# === THE SINK ===
+end_hub: end 12 0 [color=green max_drones=40]
+
+
+# ==========================================
+#               CONNECTIONS
+# ==========================================
+
+# Source -> L1 (Heavy pressure)
+connection: start-L1_top [max_link_capacity=2]
+connection: start-L1_mid [max_link_capacity=2]
+connection: start-L1_bot [max_link_capacity=2]
+
+# L1 -> L2 (The Shattering)
+connection: L1_top-L2_T1 [max_link_capacity=1]
+connection: L1_top-L2_T2 [max_link_capacity=1]
+connection: L1_mid-L2_M1 [max_link_capacity=1]
+connection: L1_mid-L2_M2 [max_link_capacity=1]
+connection: L1_bot-L2_B1 [max_link_capacity=1]
+connection: L1_bot-L2_B2 [max_link_capacity=1]
+
+# Cross-bleed L1 -> L2 (Allowing drones to switch streams early)
+connection: L1_top-L2_M1 [max_link_capacity=1]
+connection: L1_bot-L2_M2 [max_link_capacity=1]
+connection: L1_mid-L2_T2 [max_link_capacity=1]
+connection: L1_mid-L2_B1 [max_link_capacity=1]
+
+# L2 -> L3 (The Corridors)
+connection: L2_T1-L3_T1 [max_link_capacity=1]
+connection: L2_T2-L3_T2 [max_link_capacity=1]
+connection: L2_M1-L3_M1 [max_link_capacity=1]
+connection: L2_M2-L3_M2 [max_link_capacity=1]
+connection: L2_B1-L3_B1 [max_link_capacity=1]
+connection: L2_B2-L3_B2 [max_link_capacity=1]
+
+# L3 -> L4 (The Braiding)
+connection: L3_T1-L4_T1 [max_link_capacity=1]
+connection: L3_T2-L4_T2 [max_link_capacity=1]
+connection: L3_T2-L4_T1 [max_link_capacity=1]
+connection: L3_M1-L4_M [max_link_capacity=1]
+connection: L3_M2-L4_M [max_link_capacity=1]
+connection: L3_M1-L4_T2 [max_link_capacity=1]
+connection: L3_M2-L4_B1 [max_link_capacity=1]
+connection: L3_B1-L4_B1 [max_link_capacity=1]
+connection: L3_B1-L4_B2 [max_link_capacity=1]
+connection: L3_B2-L4_B2 [max_link_capacity=1]
+
+# L4 -> L5 (The Funnel)
+connection: L4_T1-L5_top [max_link_capacity=1]
+connection: L4_T2-L5_top [max_link_capacity=1]
+connection: L4_T2-L5_mid [max_link_capacity=1]
+connection: L4_M-L5_mid [max_link_capacity=2]
+connection: L4_B1-L5_mid [max_link_capacity=1]
+connection: L4_B1-L5_bot [max_link_capacity=1]
+connection: L4_B2-L5_bot [max_link_capacity=1]
+
+# L5 -> Sink (Final Push)
+connection: L5_top-end [max_link_capacity=2]
+connection: L5_mid-end [max_link_capacity=2]
+connection: L5_bot-end [max_link_capacity=2]

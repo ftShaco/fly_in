@@ -1,15 +1,13 @@
 from models import GameMap, Zone, Connection
 import sys
+from typing import Self
 
 
 class MapSolver:
-    def __init__(self, g_map: GameMap):
+    def __init__(self: Self, g_map: GameMap) -> None:
         self.g_map = g_map
 
-    def output_orders() -> list[str]:
-        pass
-
-    def solve_dijsktra(g_map: GameMap) -> list[Zone]:
+    def solve_dijsktra(self: Self, g_map: GameMap) -> list[Zone]:
         start = g_map.start_hub
         end = g_map.end_hub
 
@@ -44,7 +42,7 @@ class MapSolver:
 
         return path[::-1]
 
-    def spatial_temp_dijkstra(self, zone_r: dict[tuple[Zone, int], int],
+    def spatial_temp_dijkstra(self: Self, zone_r: dict[tuple[Zone, int], int],
                               route_r: dict[tuple[Connection, int], int])\
             -> list[Zone]:
         start = self.g_map.start_hub
@@ -111,7 +109,7 @@ class MapSolver:
 
         return final_path
 
-    def apply_dijsktra(self) -> list[list[str]]:
+    def apply_dijsktra(self: Self) -> list[list[str]]:
 
         zone_reservations: dict[tuple[Zone, int], int] = {}
         route_reservations: dict[tuple[Connection, int], int] = {}
@@ -130,7 +128,7 @@ class MapSolver:
 
         return all_orders
 
-    def book_path(self, path: list[Zone],
+    def book_path(self: Self, path: list[Zone],
                   zone_res: dict[tuple[Zone, int], int],
                   route_res: dict[tuple[Connection, int], int],
                   all_orders: list[list[str]],
@@ -150,7 +148,8 @@ class MapSolver:
                 else:
                     while len(all_orders) <= current_turn:
                         all_orders.append([])
-                    all_orders[current_turn].append(f"{drone_tag}-{next_zone.name}")
+                    all_orders[current_turn].append(f"{drone_tag}-"
+                                                    f"{next_zone.name}")
 
                     used_connection =\
                         self.g_map.get_connection(current_zone, next_zone)

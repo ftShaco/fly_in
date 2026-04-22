@@ -1,13 +1,14 @@
-from models import GameMap, Drone, Zone
+from models import GameMap, Drone, Zone, Connection
+from typing import Self
 
 
 class TurnSimulator:
-    def __init__(self, game_map: GameMap) -> None:
+    def __init__(self: Self, game_map: GameMap) -> None:
         self.turn_count = 0
         self.game_map = game_map
         self.drones_dict: dict[str, Drone] = {}
 
-    def init_first_turn(self) -> None:
+    def init_first_turn(self: Self) -> None:
         for i in range(self.game_map.nb_drones):
             new_drone = Drone(f"{i}")
             self.game_map.start_hub.garage.append(new_drone)
@@ -15,7 +16,7 @@ class TurnSimulator:
         for d in self.drones_dict.values():
             d.current_zone = self.game_map.start_hub
 
-    def execute_turn(self, moves: list[str]) -> None:
+    def execute_turn(self: Self, moves: list[str]) -> None:
         # Transit management
         for d in self.drones_dict.values():
             if d.transit_timer > 0:
@@ -24,9 +25,9 @@ class TurnSimulator:
                     d.current_zone = d.target_zone
                     d.target_zone.garage.append(d)
 
-        drones_leaving_zone = {}
-        drones_entering_zone = {}
-        connection_usage = {}
+        drones_leaving_zone: dict[Zone, int] = {}
+        drones_entering_zone: dict[Zone, int] = {}
+        connection_usage: dict[Connection, int] = {}
         valid_moves: list[tuple[Zone, Drone]] = []
 
         # Validating orders

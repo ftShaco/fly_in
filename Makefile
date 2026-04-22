@@ -1,15 +1,17 @@
 PYTHON = uv run python
 SCRIPT = src/__main__.py
+MAP ?= maps/test.txt
 
-.PHONY: install run debug clean lint lint-strict
+.PHONY: install run viz debug clean lint lint-strict
 
 install:
 	@echo "Synchronisation de l'environnement avec uv..."
 	uv sync
-	@echo "\nDependencies installed."
+	@echo "Dependencies installed."
 
 run:
-	$(PYTHON) -m src || true
+	@echo "Starting simulation on $(MAP)..."
+	$(PYTHON) -m fly_in $(MAP) || true
 
 debug:
 	$(PYTHON) -m pdb $(SCRIPT)
@@ -22,9 +24,9 @@ clean:
 	@echo "Cleaned up cache files."
 
 lint:
-	uv run flake8 src/
-	uv run mypy src/ --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
+	uv run flake8
+	uv run mypy . --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 
 lint-strict:
-	uv run flake8 src/
-	uv run mypy src/ --strict
+	uv run flake8
+	uv run mypy . --strict

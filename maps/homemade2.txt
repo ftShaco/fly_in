@@ -1,0 +1,98 @@
+# THE DNA HELIX - SPATIO-TEMPORAL WEAVING
+# Purpose: Create a visual masterpiece of traffic management.
+# Drones must dynamically choose between the slow direct core, 
+# the interwoven helix strands, or the fast but long outer orbits.
+
+nb_drones: 50
+
+# === THE ORIGIN ===
+start_hub: start 0 0 [color=green max_drones=50]
+
+# === THE CORE PIPELINE (Slow, Direct, Low Capacity) ===
+hub: pipe1 2 0 [zone=restricted color=purple max_drones=1]
+hub: pipe2 6 0 [zone=restricted color=purple max_drones=1]
+hub: pipe3 10 0 [zone=restricted color=purple max_drones=1]
+hub: pipe4 14 0 [zone=restricted color=purple max_drones=1]
+
+# === THE CROSSINGS (The Bottlenecks) ===
+hub: cross1 4 0 [color=yellow max_drones=2]
+hub: cross2 8 0 [color=yellow max_drones=2]
+hub: cross3 12 0 [color=yellow max_drones=2]
+
+# === STRAND A (Crimson Wave) ===
+hub: A1 2 2 [color=crimson max_drones=1]
+hub: A2 6 -2 [color=crimson max_drones=1]
+hub: A3 10 2 [color=crimson max_drones=1]
+hub: A4 14 -2 [color=crimson max_drones=1]
+
+# === STRAND B (Blue Wave) ===
+hub: B1 2 -2 [color=blue max_drones=1]
+hub: B2 6 2 [color=blue max_drones=1]
+hub: B3 10 -2 [color=blue max_drones=1]
+hub: B4 14 2 [color=blue max_drones=1]
+
+# === OUTER ORBIT TOP (Fast, Long, High Capacity) ===
+hub: orb_T1 4 4 [zone=priority color=cyan max_drones=4]
+hub: orb_T2 8 4 [zone=priority color=cyan max_drones=4]
+hub: orb_T3 12 4 [zone=priority color=cyan max_drones=4]
+
+# === OUTER ORBIT BOTTOM (Fast, Long, High Capacity) ===
+hub: orb_B1 4 -4 [zone=priority color=cyan max_drones=4]
+hub: orb_B2 8 -4 [zone=priority color=cyan max_drones=4]
+hub: orb_B3 12 -4 [zone=priority color=cyan max_drones=4]
+
+# === THE TERMINUS ===
+end_hub: end 16 0 [color=green max_drones=50]
+
+
+# ==========================================
+# CONNECTIONS (The Web of Life)
+# ==========================================
+
+# -- Entry points --
+connection: start-pipe1 [max_link_capacity=1]
+connection: start-A1 [max_link_capacity=2]
+connection: start-B1 [max_link_capacity=2]
+
+# -- The Central Pipe --
+connection: pipe1-cross1 [max_link_capacity=1]
+connection: cross1-pipe2 [max_link_capacity=1]
+connection: pipe2-cross2 [max_link_capacity=1]
+connection: cross2-pipe3 [max_link_capacity=1]
+connection: pipe3-cross3 [max_link_capacity=1]
+connection: cross3-pipe4 [max_link_capacity=1]
+connection: pipe4-end [max_link_capacity=1]
+
+# -- Strand A Weaving --
+connection: A1-cross1 [max_link_capacity=2]
+connection: cross1-A2 [max_link_capacity=2]
+connection: A2-cross2 [max_link_capacity=2]
+connection: cross2-A3 [max_link_capacity=2]
+connection: A3-cross3 [max_link_capacity=2]
+connection: cross3-A4 [max_link_capacity=2]
+connection: A4-end [max_link_capacity=2]
+
+# -- Strand B Weaving --
+connection: B1-cross1 [max_link_capacity=2]
+connection: cross1-B2 [max_link_capacity=2]
+connection: B2-cross2 [max_link_capacity=2]
+connection: cross2-B3 [max_link_capacity=2]
+connection: B3-cross3 [max_link_capacity=2]
+connection: cross3-B4 [max_link_capacity=2]
+connection: B4-end [max_link_capacity=2]
+
+# -- Outer Orbit Top (Connected to the peaks of the Strands) --
+connection: A1-orb_T1 [max_link_capacity=3]
+connection: orb_T1-B2 [max_link_capacity=3]
+connection: B2-orb_T2 [max_link_capacity=3]
+connection: orb_T2-A3 [max_link_capacity=3]
+connection: A3-orb_T3 [max_link_capacity=3]
+connection: orb_T3-B4 [max_link_capacity=3]
+
+# -- Outer Orbit Bottom (Connected to the troughs of the Strands) --
+connection: B1-orb_B1 [max_link_capacity=3]
+connection: orb_B1-A2 [max_link_capacity=3]
+connection: A2-orb_B2 [max_link_capacity=3]
+connection: orb_B2-B3 [max_link_capacity=3]
+connection: B3-orb_B3 [max_link_capacity=3]
+connection: orb_B3-A4 [max_link_capacity=3]
