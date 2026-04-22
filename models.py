@@ -74,6 +74,12 @@ class GameMap:
     zone_dict: dict[str, Zone]
     connections: list[Connection]
 
+    def get_connection(self, zone_a: Zone, zone_b: Zone) -> Connection:
+        for c in zone_a.connections:
+            if c.get_opposite_zone(zone_a) == zone_b:
+                return c
+        return None
+
 
 class Drone:
     def __init__(self, id: str):

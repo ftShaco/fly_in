@@ -1,4 +1,4 @@
-from models import GameMap, Drone, Zone, Connection
+from models import GameMap, Drone, Zone
 
 
 class TurnSimulator:
@@ -14,12 +14,6 @@ class TurnSimulator:
             self.drones_dict[new_drone.full_tag] = new_drone
         for d in self.drones_dict.values():
             d.current_zone = self.game_map.start_hub
-
-    def get_connection(self, zone_a: Zone, zone_b: Zone) -> Connection:
-        for c in zone_a.connections:
-            if c.get_opposite_zone(zone_a) == zone_b:
-                return c
-        return None
 
     def execute_turn(self, moves: list[str]) -> None:
         # Transit management
@@ -56,7 +50,8 @@ class TurnSimulator:
                                  f"current_zone = {current_zone}\n"
                                  f"destination = {destination}")
 
-            chosen_connection = self.get_connection(current_zone, destination)
+            chosen_connection =\
+                self.game_map.get_connection(current_zone, destination)
             connection_usage[chosen_connection] = \
                 connection_usage.get(chosen_connection, 0) + 1
             if connection_usage[chosen_connection] >\
@@ -67,8 +62,9 @@ class TurnSimulator:
 
             drones_leaving_zone[current_zone] =\
                 drones_leaving_zone.get(current_zone, 0) + 1
-            drones_entering_zone[destination] =\
-                drones_entering_zone.get(destination, 0) + 1
+            if destination.zone_type != "restricted":
+                drones_entering_zone[destination] =\
+                    drones_entering_zone.get(destination, 0) + 1
 
             valid_moves.append((destination, drone))
 
