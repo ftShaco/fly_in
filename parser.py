@@ -1,15 +1,38 @@
-from models import GameMap, NormalZone, Connection
+from models import GameMap, NormalZone, Connection, Zone
 from models import PriorityZone, BlockedZone, RestrictedZone
 import sys
 
 
 def parse_map(config_file: str) -> GameMap:
-    new_map = GameMap(nb_drones=0, start_hub="", end_hub="",
+    """Parse a map configuration file and create a GameMap object.
+
+    Reads a map file with the following format:
+    - nb_drones: <number> (must be first line)
+    - start_hub: <name> <x> <y> [metadata]
+    - end_hub: <name> <x> <y> [metadata]
+    - hub: <name> <x> <y> [metadata]
+    - connection: <name1>-<name2> [metadata]
+
+    Metadata options: [color=<value>] [zone=<type>] [max_drones=<number>]
+                     [max_link_capacity=<number>]
+
+    Args:
+        config_file: Path to the map configuration file.
+
+    Returns:
+        A fully initialized GameMap object.
+
+    Raises:
+        ValueError: If the map file is corrupted or missing required elements.
+    """
+    new_map = GameMap(nb_drones=0, start_hub=NormalZone('', '', 0, 0),
+                      end_hub=NormalZone('', '', 0, 0),
                       zone_dict={}, connections=[])
     try:
         with open(config_file, 'r') as f:
             line_count = 0
             seen_connections = set()
+            new_zone: Zone
             for line in f:
                 line = line.strip()
                 if not line or line.startswith("#"):
@@ -25,7 +48,7 @@ def parse_map(config_file: str) -> GameMap:
                                      "end_hub: <name> <x> <y> [metadata]\n"
                                      "hub: <name> <x> <y> [metadata]\n"
                                      "connection: <name1>-<name2> [metadata]")
-                metadata = {}
+                metadata: dict[str, str] = {}
                 possible_keys = ['color', 'zone', 'max_drones',
                                  'max_link_capacity']
                 if len(parts) > 1:
@@ -93,7 +116,7 @@ def parse_map(config_file: str) -> GameMap:
                                          f"value: {base_part}")
 
                 elif keyword == "start_hub":
-                    if new_map.start_hub != "":
+                    if new_map.start_hub.name != "":
                         raise ValueError("Corrupted map file: there can be"
                                          "only one start_hub")
                     new_zone = NormalZone(keyword, base_part[1],
@@ -118,7 +141,7 @@ def parse_map(config_file: str) -> GameMap:
                     new_map.zone_dict[new_zone.name] = new_zone
 
                 elif keyword == "end_hub":
-                    if new_map.end_hub != "":
+                    if new_map.end_hub.name != "":
                         raise ValueError("Corrupted map file: there can be"
                                          "only one end_hub")
                     new_zone = NormalZone(keyword, base_part[1],

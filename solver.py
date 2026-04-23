@@ -4,10 +4,38 @@ from typing import Self
 
 
 class MapSolver:
+    """Solver for finding optimal paths for drones using Dijkstra's algorithm.
+
+    This class provides methods to find paths for drones on the game map,
+    considering spatial-temporal constraints, zone capacities, and connection
+    limits.
+
+    Attributes:
+        g_map: The GameMap to solve.
+    """
+
     def __init__(self: Self, g_map: GameMap) -> None:
+        """Initialize the MapSolver.
+
+        Args:
+            g_map: The GameMap to solve.
+        """
         self.g_map = g_map
 
     def solve_dijsktra(self: Self, g_map: GameMap) -> list[Zone]:
+        """Find shortest path from start to end hub using Dijkstra.
+
+        This is a basic spatial path finder without temporal constraints.
+
+        Args:
+            g_map: The GameMap to solve.
+
+        Returns:
+            A list of Zone objects representing the path from start to end hub.
+
+        Raises:
+            SystemExit: If no path exists or the map is unsolvable.
+        """
         start = g_map.start_hub
         end = g_map.end_hub
 
@@ -45,6 +73,21 @@ class MapSolver:
     def spatial_temp_dijkstra(self: Self, zone_r: dict[tuple[Zone, int], int],
                               route_r: dict[tuple[Connection, int], int])\
             -> list[Zone]:
+        """Find a path considering both spatial and temporal constraints.
+
+        Uses a modified Dijkstra's algorithm that tracks both zone location
+        and turn number to respect capacity constraints and prevent collisions.
+
+        Args:
+            zone_r: Dictionary tracking zone occupancy at each turn as
+                {(zone, turn): occupant_count}.
+            route_r: Dictionary tracking connection usage at each turn as
+                {(connection, turn): usage_count}.
+
+        Returns:
+            A list of Zone objects representing the feasible path, or an empty
+            list if no path exists within the turn limit (100).
+        """
         start = self.g_map.start_hub
         end = self.g_map.end_hub
         start_state = (start, 0)
@@ -85,6 +128,8 @@ class MapSolver:
                 if next_zone != curr_zone:
                     used_route =\
                         self.g_map.get_connection(curr_zone, next_zone)
+                    if used_route is None:
+                        continue
                     trafic = route_r.get((used_route, curr_turn), 0)
                     if trafic >= used_route.max_link_capacity:
                         continue
@@ -110,6 +155,19 @@ class MapSolver:
         return final_path
 
     def apply_dijsktra(self: Self) -> list[list[str]]:
+        """Solve paths for all drones and generate movement orders.
+
+        For each drone, finds a path using spatial-temporal Dijkstra and
+        books the path in reservations to prevent conflicts with other
+        drones. Returns a list of turn-by-turn movement orders.
+
+        Returns:
+            A list of lists where each inner list contains movement orders for
+            that turn in format "drone_tag-destination_zone".
+
+        Raises:
+            SystemExit: If a drone has no possible path.
+        """
 
         zone_reservations: dict[tuple[Zone, int], int] = {}
         route_reservations: dict[tuple[Connection, int], int] = {}
@@ -133,6 +191,20 @@ class MapSolver:
                   route_res: dict[tuple[Connection, int], int],
                   all_orders: list[list[str]],
                   drone_tag: str) -> None:
+        """Reserve a path for a drone and generate movement orders.
+
+        Updates zone and connection reservations to prevent other drones from
+        using the same resources at the same time. Populates all_orders with
+        movement commands for each turn.
+
+        Args:
+            path: List of zones forming the drone's path.
+            zone_res: Dictionary tracking zone reservations by (zone, turn).
+            route_res: Dictionary tracking connection reservations by
+                (connection, turn).
+            all_orders: List of turn-by-turn orders to populate with moves.
+            drone_tag: The unique identifier of the drone (e.g., "D0").
+        """
 
         current_turn = 0
         for i in range(len(path)):

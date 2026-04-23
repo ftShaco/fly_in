@@ -1,19 +1,29 @@
-#!/usr/bin/env python3
-
 import sys
+import argparse 
 from parser import parse_map
 from simulator import TurnSimulator
 from solver import MapSolver
 from visualizer import Displayer
+from models import Analyst
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Drone Swarm"
+                                     "Pathfinding Simulator")
+    parser.add_argument("map_file",
+                        help="Path to the map configuration file (.txt)")
+    parser.add_argument("--visual", action="store_true",
+                        help="Launch the Pygame visualizer")
+    parser.add_argument("--analysis", action="store_true",
+                        help="Print performance metrics")
+
     try:
-        config_file = sys.argv[1]
-    except Exception as e:
-        print(f"{e}\n"
-              "Error with the map file, usage: 'p fly_in.py <map_config.txt>'")
+        args = parser.parse_args()
+    except SystemExit:
         sys.exit(1)
+
+    config_file = args.map_file
+
     try:
         game_map = parse_map(config_file)
         simulator = TurnSimulator(game_map)
@@ -33,10 +43,20 @@ def main() -> None:
         for order in all_orders:
             simulator.execute_turn(order)
 
-        visualizer = Displayer(game_map, "output.txt")
-        visualizer.display()
+        if args.analysis:
+            evaluator = Analyst(all_orders, game_map)
+            analysis = evaluator.evaluate_performance()
+            print("\n=== ANALYSIS ===")
+            print(f"Efficiency: {analysis['efficiency']:.1f}%")
+            print(f"Avg turns/drone: {analysis['flowtime']:.1f}")
+            print(f"Total path cost: {analysis['total_cost']}")
 
-        print(f"Simulated in {simulator.turn_count} turn")
+        if args.visual:
+            visualizer = Displayer(game_map, "output.txt")
+            visualizer.display()
+
+        print(f"\nSimulated in {simulator.turn_count} turn(s)\n")
+
     except Exception as e:
         print(f"Error occured:\n{e}")
         sys.exit(1)

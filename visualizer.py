@@ -1,7 +1,8 @@
-import pygame
 from typing import Self
 from models import GameMap
 import sys
+import pygame
+
 
 WIDTH, HEIGHT = 2560, 1440
 FPS = 60
@@ -34,17 +35,58 @@ COLORS = {
 
 
 class Displayer:
-    def __init__(self: Self, game_map: GameMap, output: str):
+    """Handles visualization of the game map and drone movement simulation.
+
+    This class uses Pygame to render the map with zones and connections,
+    and animate drone movements across the map based on a timeline of moves.
+
+    Attributes:
+        game_map: The GameMap to display.
+        output: Path to the file containing movement orders/timeline.
+    """
+
+    def __init__(self: Self, game_map: GameMap, output: str) -> None:
+        """Initialize the Displayer.
+
+        Args:
+            game_map: The GameMap to display.
+            output: Path to the file containing movement orders for animation.
+        """
         self.game_map = game_map
         self.output = output
 
     def world_to_screen(self: Self, x: float, y: float) -> tuple[int, int]:
+        """Convert world coordinates to screen coordinates.
+
+        Args:
+            x: World X coordinate.
+            y: World Y coordinate.
+
+        Returns:
+            A tuple (screen_x, screen_y) with pixel coordinates for rendering.
+        """
         screen_x = int(OFFSET_X + (x * SCALE))
-        screen_y = int(OFFSET_Y - (y * SCALE)) 
+        screen_y = int(OFFSET_Y - (y * SCALE))
         return screen_x, screen_y
 
     def load_timeline(self: Self, output_file: str, game_map: GameMap)\
-            -> list[dict]:
+            -> list[dict[str, str]]:
+        """Load drone movement timeline from output file.
+
+        Reads movement orders and constructs a timeline showing drone positions
+        at each turn. Each turn lists which zone each drone is in.
+
+        Args:
+            output_file: Path to the file containing movement orders.
+            game_map: The GameMap with drone and zone information.
+
+        Returns:
+            A list of dictionaries where each dictionary maps drone tags to
+            their zone names for that turn.
+
+        Raises:
+            SystemExit: If the output file cannot be found.
+        """
         timeline = []
         current_state = {}
         for i in range(game_map.nb_drones):
@@ -67,7 +109,17 @@ class Displayer:
 
         return timeline
 
-    def draw_map(self: Self, screen, game_map: GameMap):
+    def draw_map(self: Self, screen: pygame.Surface,
+                 game_map: GameMap) -> None:
+        """Draw the map including zones and connections on the screen.
+
+        Renders all zones as circles with appropriate colors based on
+        their type, and connections as lines between them.
+
+        Args:
+            screen: The pygame Surface to draw on.
+            game_map: The GameMap containing zones and connections to render.
+        """
         screen.fill(COLORS["bg"])
 
         for con in game_map.connections:
@@ -94,8 +146,21 @@ class Displayer:
             pygame.draw.circle(screen, color, (x, y), 15)
             pygame.draw.circle(screen, (200, 200, 200), (x, y), 15, 1)
 
-    def draw_drones(self: Self, screen, game_map, timeline,
-                    current_turn, progress):
+    def draw_drones(self: Self, screen: pygame.Surface, game_map: GameMap,
+                    timeline: list[dict[str, str]], current_turn: int,
+                    progress: float) -> None:
+        """Draw drones on the screen with smooth animation between zones.
+
+        Interpolates drone positions between their current and next zones
+        based on animation progress to create smooth movement animation.
+
+        Args:
+            screen: The pygame Surface to draw on.
+            game_map: The GameMap containing zone positions.
+            timeline: The timeline of drone positions for each turn.
+            current_turn: The current turn number in the animation.
+            progress: Animation progress from 0.0 to 1.0 for the current turn.
+        """
 
         state_now = timeline[current_turn]
 
@@ -122,6 +187,12 @@ class Displayer:
                                8, 2)
 
     def display(self: Self) -> None:
+        """Start the interactive animation display of drone movements.
+
+        Initializes pygame and creates an interactive window showing the map
+        and animating drone movements based on the loaded timeline. Supports
+        play/pause controls and frame-by-frame navigation.
+        """
 
         game_map = self.game_map
         timeline = self.load_timeline(self.output, game_map)
@@ -163,6 +234,10 @@ class Displayer:
                         if current_turn > 0:
                             current_turn -= 1
                             anim_progress = 0.0
+                    elif event.key == pygame.K_r:
+                        current_turn = 0
+                        anim_progress = 0.0
+                        is_playing = True
 
             if is_playing and current_turn < max_turns:
                 anim_progress += anim_speed
@@ -179,7 +254,9 @@ class Displayer:
                              anim_progress)
 
             font = pygame.font.SysFont(None, 36)
-            header_text = font.render(f"Tour : {current_turn} / {max_turns} | [Espace] Play/Pause", True, (255, 255, 255))
+            header_text = font.render(f"Tour : {current_turn} / {max_turns} "
+                                      "| [Espace] Play/Pause [R] Replay", True,
+                                      (255, 255, 255))
             screen.blit(header_text, (20, 20))
 
             legend_font = pygame.font.SysFont(None, 24)
