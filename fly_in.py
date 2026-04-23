@@ -43,6 +43,9 @@ def main() -> None:
                 else:
                     file.write("\n")
 
+        print(f"\nSimulated in {simulator.turn_count} turn(s)\n")
+        print("Simulation output available in 'output.txt'\n")
+
         if args.analysis:
             evaluator = Analyst(all_orders, game_map)
             analysis = evaluator.evaluate_performance()
@@ -55,8 +58,13 @@ def main() -> None:
             visualizer = Displayer(game_map, "output.txt")
             visualizer.display()
 
-        print(f"\nSimulated in {simulator.turn_count} turn(s)\n")
-        print("Simulation output available in 'output.txt'\n")
+        if not args.visual:
+            print("Visual available with flag --visual\n"
+                  f"Run : 'make run MAP={args.map_file} FLAGS=--visual'\n")
+
+        if not args.analysis:
+            print("Analysis available with flag --analysis\n"
+                  f"Run : 'make run MAP={args.map_file} FLAGS=--analysis'\n")
 
     except Exception as e:
         print(f"Error occured:\n{e}")

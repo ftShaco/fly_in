@@ -1,6 +1,6 @@
 PYTHON = uv run python
 SCRIPT = fly_in.py
-MAP ?= maps/test.txt
+MAP ?= maps/challenger/01_the_impossible_dream.txt
 FLAGS ?=
 
 export PYGAME_HIDE_SUPPORT_PROMPT=hide
