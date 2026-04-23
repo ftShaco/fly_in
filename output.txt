@@ -1,32 +1,26 @@
-D0-A1 D1-B1 D2-pipe1
-D0-cross1 D1-cross1 D3-A1 D4-pipe1 D5-B1
-D0-A2 D1-B2 D2-cross1 D3-cross1 D6-pipe1 D7-A1
-D0-cross2 D1-cross2 D2-A2 D3-B2 D4-cross1 D5-cross1 D7-orb_T1 D8-A1 D9-pipe1 D10-B1
-D0-A3 D1-B3 D2-cross2 D3-cross2 D4-A2 D5-B2 D6-cross1 D8-cross1 D11-pipe1 D12-A1
-D0-cross3 D1-cross3 D2-A3 D3-B3 D4-cross2 D5-cross2 D6-A2 D7-B2 D8-pipe2 D9-cross1 D10-cross1 D13-pipe1 D14-B1
-D0-A4 D1-B4 D2-cross3 D3-cross3 D4-A3 D5-B3 D6-cross2 D7-cross2 D9-A2 D10-pipe2 D11-cross1 D12-cross1 D15-pipe1 D16-A1
-D0-end D1-end D2-A4 D3-B4 D4-cross3 D5-cross3 D6-A3 D7-B3 D8-cross2 D9-cross2 D11-A2 D12-pipe2 D13-cross1 D14-cross1 D17-pipe1 D18-B1
-D2-end D3-end D4-A4 D5-B4 D6-cross3 D7-cross3 D8-A3 D9-B3 D10-cross2 D11-cross2 D13-A2 D14-pipe2 D15-cross1 D16-cross1 D19-pipe1 D20-A1
-D4-end D5-end D6-A4 D7-B4 D8-cross3 D9-cross3 D10-A3 D11-B3 D12-cross2 D13-cross2 D15-A2 D16-pipe2 D17-cross1 D18-cross1 D21-pipe1 D22-B1
-D6-end D7-end D8-A4 D9-B4 D10-cross3 D11-cross3 D12-A3 D13-B3 D14-cross2 D15-cross2 D17-A2 D18-pipe2 D19-cross1 D20-cross1 D23-pipe1 D24-A1
-D8-end D9-end D10-A4 D11-B4 D12-cross3 D13-cross3 D14-A3 D15-B3 D16-cross2 D17-cross2 D19-A2 D20-pipe2 D21-cross1 D22-cross1 D25-pipe1 D26-B1
-D10-end D11-end D12-A4 D13-B4 D14-cross3 D15-cross3 D16-A3 D17-B3 D18-cross2 D19-cross2 D21-A2 D22-pipe2 D23-cross1 D24-cross1 D27-pipe1 D28-A1
-D12-end D13-end D14-A4 D15-B4 D16-cross3 D17-cross3 D18-A3 D19-B3 D20-cross2 D21-cross2 D23-A2 D24-pipe2 D25-cross1 D26-cross1 D29-pipe1 D30-B1
-D14-end D15-end D16-A4 D17-B4 D18-cross3 D19-cross3 D20-A3 D21-B3 D22-cross2 D23-cross2 D25-A2 D26-pipe2 D27-cross1 D28-cross1 D31-pipe1 D32-A1
-D16-end D17-end D18-A4 D19-B4 D20-cross3 D21-cross3 D22-A3 D23-B3 D24-cross2 D25-cross2 D27-A2 D28-pipe2 D29-cross1 D30-cross1 D33-pipe1 D34-B1
-D18-end D19-end D20-A4 D21-B4 D22-cross3 D23-cross3 D24-A3 D25-B3 D26-cross2 D27-cross2 D29-A2 D30-pipe2 D31-cross1 D32-cross1 D35-pipe1 D36-A1
-D20-end D21-end D22-A4 D23-B4 D24-cross3 D25-cross3 D26-A3 D27-B3 D28-cross2 D29-cross2 D31-A2 D32-pipe2 D33-cross1 D34-cross1 D37-pipe1 D38-B1
-D22-end D23-end D24-A4 D25-B4 D26-cross3 D27-cross3 D28-A3 D29-B3 D30-cross2 D31-cross2 D33-A2 D34-pipe2 D35-cross1 D36-cross1 D39-pipe1 D40-A1
-D24-end D25-end D26-A4 D27-B4 D28-cross3 D29-cross3 D30-A3 D31-B3 D32-cross2 D33-cross2 D35-A2 D36-pipe2 D37-cross1 D38-cross1 D41-pipe1 D42-B1
-D26-end D27-end D28-A4 D29-B4 D30-cross3 D31-cross3 D32-A3 D33-B3 D34-cross2 D35-cross2 D37-A2 D38-pipe2 D39-cross1 D40-cross1 D43-pipe1 D44-A1
-D28-end D29-end D30-A4 D31-B4 D32-cross3 D33-cross3 D34-A3 D35-B3 D36-cross2 D37-cross2 D39-A2 D40-pipe2 D41-cross1 D42-cross1 D45-pipe1 D46-B1
-D30-end D31-end D32-A4 D33-B4 D34-cross3 D35-cross3 D36-A3 D37-B3 D38-cross2 D39-cross2 D41-A2 D42-pipe2 D43-cross1 D44-cross1 D47-pipe1 D48-A1
-D32-end D33-end D34-A4 D35-B4 D36-cross3 D37-cross3 D38-A3 D39-B3 D40-cross2 D41-cross2 D43-A2 D44-pipe2 D45-cross1 D46-cross1 D49-pipe1
-D34-end D35-end D36-A4 D37-B4 D38-cross3 D39-cross3 D40-A3 D41-B3 D42-cross2 D43-cross2 D45-A2 D46-pipe2 D47-cross1 D48-cross1
-D36-end D37-end D38-A4 D39-B4 D40-cross3 D41-cross3 D42-A3 D43-B3 D44-cross2 D45-cross2 D47-A2 D48-pipe2 D49-cross1
-D38-end D39-end D40-A4 D41-B4 D42-cross3 D43-cross3 D44-A3 D45-B3 D46-cross2 D47-cross2 D49-A2
-D40-end D41-end D42-A4 D43-B4 D44-cross3 D45-cross3 D46-A3 D47-B3 D48-cross2 D49-cross2
-D42-end D43-end D44-A4 D45-B4 D46-cross3 D47-cross3 D48-A3 D49-B3
-D44-end D45-end D46-A4 D47-B4 D48-cross3 D49-cross3
-D46-end D47-end D48-A4 D49-B4
-D48-end D49-end
+D0-dist_gate1 D2-dist_gate2 D3-dist_gate3
+D0-maze_correct D1-dist_gate1 D2-start D3-start
+D0-bottleneck1 D1-maze_correct D2-dist_gate1 D4-dist_gate2 D5-dist_gate3
+D0-bottleneck2 D1-bottleneck1 D2-maze_correct D3-dist_gate1 D4-start D5-start
+D0-priority_hub D1-bottleneck2 D2-bottleneck1 D3-maze_correct D4-dist_gate1 D6-dist_gate2 D7-dist_gate3
+D0-conv_priority1 D1-priority_hub D2-bottleneck2 D3-bottleneck1 D4-maze_correct D5-dist_gate1 D6-start D7-start
+D0-conv_priority2 D1-conv_priority1 D2-priority_hub D3-bottleneck2 D4-bottleneck1 D5-maze_correct D6-dist_gate1 D8-dist_gate2 D9-dist_gate3
+D0-final_merge D1-conv_priority2 D2-conv_priority1 D3-priority_hub D4-bottleneck2 D5-bottleneck1 D6-maze_correct D7-dist_gate1 D8-start D9-start
+D0-final_gate1 D1-final_merge D2-conv_priority2 D3-conv_priority1 D4-priority_hub D5-bottleneck2 D6-bottleneck1 D7-maze_correct D8-dist_gate1 D10-dist_gate2 D11-dist_gate3
+D0-final_gate2 D1-final_gate1 D2-final_merge D3-conv_priority2 D4-conv_priority1 D5-priority_hub D6-bottleneck2 D7-bottleneck1 D8-maze_correct D9-dist_gate1 D10-start D11-start
+D0-final_gate3 D1-final_gate2 D2-final_gate1 D3-final_merge D4-conv_priority2 D5-conv_priority1 D6-priority_hub D7-bottleneck2 D8-bottleneck1 D9-maze_correct D10-dist_gate1 D12-dist_gate2 D13-dist_gate3
+D0-goal D1-final_gate3 D2-final_gate2 D3-final_gate1 D4-final_merge D5-conv_priority2 D6-conv_priority1 D7-priority_hub D8-bottleneck2 D9-bottleneck1 D10-maze_correct D11-dist_gate1 D12-start D13-start
+D1-goal D2-final_gate3 D3-final_gate2 D4-final_gate1 D5-final_merge D6-conv_priority2 D7-conv_priority1 D8-priority_hub D9-bottleneck2 D10-bottleneck1 D11-maze_correct D12-dist_gate1 D14-dist_gate2
+D2-goal D3-final_gate3 D4-final_gate2 D5-final_gate1 D6-final_merge D7-conv_priority2 D8-conv_priority1 D9-priority_hub D10-bottleneck2 D11-bottleneck1 D12-maze_correct D13-dist_gate1 D14-start
+D3-goal D4-final_gate3 D5-final_gate2 D6-final_gate1 D7-final_merge D8-conv_priority2 D9-conv_priority1 D10-priority_hub D11-bottleneck2 D12-bottleneck1 D13-maze_correct D14-dist_gate1
+D4-goal D5-final_gate3 D6-final_gate2 D7-final_gate1 D8-final_merge D9-conv_priority2 D10-conv_priority1 D11-priority_hub D12-bottleneck2 D13-bottleneck1 D14-maze_correct
+D5-goal D6-final_gate3 D7-final_gate2 D8-final_gate1 D9-final_merge D10-conv_priority2 D11-conv_priority1 D12-priority_hub D13-bottleneck2 D14-bottleneck1
+D6-goal D7-final_gate3 D8-final_gate2 D9-final_gate1 D10-final_merge D11-conv_priority2 D12-conv_priority1 D13-priority_hub D14-bottleneck2
+D7-goal D8-final_gate3 D9-final_gate2 D10-final_gate1 D11-final_merge D12-conv_priority2 D13-conv_priority1 D14-priority_hub
+D8-goal D9-final_gate3 D10-final_gate2 D11-final_gate1 D12-final_merge D13-conv_priority2 D14-conv_priority1
+D9-goal D10-final_gate3 D11-final_gate2 D12-final_gate1 D13-final_merge D14-conv_priority2
+D10-goal D11-final_gate3 D12-final_gate2 D13-final_gate1 D14-final_merge
+D11-goal D12-final_gate3 D13-final_gate2 D14-final_gate1
+D12-goal D13-final_gate3 D14-final_gate2
+D13-goal D14-final_gate3
+D14-goal

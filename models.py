@@ -247,15 +247,41 @@ class Drone:
 
 
 class Analyst:
+    """Analyzes and evaluates the performance of drone pathfinding solutions.
+
+    This class calculates various performance metrics for a completed
+    simulation including efficiency, flowtime, and path costs.
+
+    Attributes:
+        game_map: The GameMap used in the simulation.
+        orders: List of turn-by-turn movement orders from the solver.
+        drone_nb: The total number of drones in the simulation.
+        end_hub_name: The name of the destination zone.
+    """
+
     def __init__(self: Self, orders: list[list[str]],
                  game_map: GameMap) -> None:
+        """Initialize the Analyst.
+
+        Args:
+            orders: List of movement orders, one list per turn.
+            game_map: The GameMap used in the simulation.
+        """
         self.game_map = game_map
         self.orders = orders
         self.drone_nb = game_map.nb_drones
         self.end_hub_name = game_map.end_hub.name
 
     def calculate_efficiency(self: Self) -> float:
-        efficiency = 0
+        """Calculate the average efficiency of drone usage per turn.
+
+        Efficiency measures the average percentage of drones being utilized
+        across all turns (percentage of drones with orders).
+
+        Returns:
+            The average efficiency as a percentage (0-100).
+        """
+        efficiency = 0.0
         turns = 0
         for order in self.orders:
             turns += 1
@@ -266,7 +292,15 @@ class Analyst:
         return efficiency
 
     def calculate_flowtime(self: Self) -> float:
-        flowtime = 0
+        """Calculate the average flowtime (turns per drone to reach end hub).
+
+        Flowtime measures how many turns on average it takes for a drone to
+        reach the destination from start to finish.
+
+        Returns:
+            The average flowtime in turns.
+        """
+        flowtime = 0.0
         i = 0
         for order in self.orders:
             i += 1
@@ -278,6 +312,14 @@ class Analyst:
         return avg_flowtime
 
     def calculate_path_cost(self: Self) -> float:
+        """Calculate the total movement cost across all drone paths.
+
+        Path cost is the sum of all zone traversal costs for every drone
+        as they move from start to end hub.
+
+        Returns:
+            The total cost accumulated across all drone movements.
+        """
         total_cost = 0
         for order in self.orders:
             for o in order:
@@ -287,6 +329,17 @@ class Analyst:
         return total_cost
 
     def evaluate_performance(self: Self) -> dict[str, float]:
+        """Evaluate all performance metrics for the simulation.
+
+        Computes and returns a comprehensive analysis of the solution quality
+        including efficiency, flowtime, and total path cost.
+
+        Returns:
+            A dictionary with keys:
+                - 'efficiency': Average drone utilization percentage
+                - 'flowtime': Average turns per drone
+                - 'total_cost': Total zone traversal cost
+        """
         return {
             "efficiency": self.calculate_efficiency(),
             "flowtime": self.calculate_flowtime(),

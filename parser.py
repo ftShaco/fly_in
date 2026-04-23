@@ -32,6 +32,7 @@ def parse_map(config_file: str) -> GameMap:
         with open(config_file, 'r') as f:
             line_count = 0
             seen_connections = set()
+            seen_coordinates = set()
             new_zone: Zone
             for line in f:
                 line = line.strip()
@@ -101,6 +102,12 @@ def parse_map(config_file: str) -> GameMap:
                             not base_part[3].lstrip('-').isdigit():
                         raise ValueError("Corrupted map file, coordinates X "
                                          "and Y must be positive integers")
+                    x, y = int(base_part[2]), int(base_part[3])
+                    if (x, y) in seen_coordinates:
+                        raise ValueError(f"Corrupted map file: The coordinates"
+                                         f" ({x}, {y}) are already occupied. "
+                                         "Zones cannot overlap.")
+                    seen_coordinates.add((x, y))
 
                 if keyword == "nb_drones":
                     if line_count != 1:

@@ -1,5 +1,5 @@
 import sys
-import argparse 
+import argparse
 from parser import parse_map
 from simulator import TurnSimulator
 from solver import MapSolver
@@ -32,6 +32,9 @@ def main() -> None:
         simulator.init_first_turn()
         all_orders = solver.apply_dijsktra()
 
+        for order in all_orders:
+            simulator.execute_turn(order)
+
         with open('output.txt', 'w') as file:
             for order in all_orders:
                 if order:
@@ -39,9 +42,6 @@ def main() -> None:
                     file.write(f"{new_line}\n")
                 else:
                     file.write("\n")
-
-        for order in all_orders:
-            simulator.execute_turn(order)
 
         if args.analysis:
             evaluator = Analyst(all_orders, game_map)
@@ -56,6 +56,7 @@ def main() -> None:
             visualizer.display()
 
         print(f"\nSimulated in {simulator.turn_count} turn(s)\n")
+        print("Simulation output available in 'output.txt'\n")
 
     except Exception as e:
         print(f"Error occured:\n{e}")
