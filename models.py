@@ -345,3 +345,59 @@ class Analyst:
             "flowtime": self.calculate_flowtime(),
             "total_cost": self.calculate_path_cost()
         }
+
+    def turn_occupacy(self: Self) -> dict[list[str]]:
+        route_caps = {}
+        for conn in self.game_map.connections:
+            route_id = tuple(sorted([conn.zone_a.name, conn.zone_b.name]))
+            route_caps[route_id] = getattr(conn, 'max_link_capacity', '∞')
+
+        map_occupacy: dict[int, list[str]] = {}
+        map_occupacy[0] = [f"{self.game_map.start_hub.name}: "
+                           f"{self.game_map.nb_drones}/"
+                           f"{self.game_map.nb_drones}"]
+        positions = {f"D{i}": self.game_map.start_hub.name for i
+                     in range(self.drone_nb)}
+
+        for turn_idx, turn_orders in enumerate(self.orders, start=1):
+            traffic_counts = {route_id: 0 for route_id in route_caps.keys()}
+            zone_counts = {zone_name: 0 for zone_name in
+                           self.game_map.zone_dict}
+            moving_drones = set()
+
+            for move in turn_orders:
+                drone, dest = move.split('-')
+                origin = positions[drone]
+
+                if origin != dest:
+                    moving_drones.add(drone)
+                    route_id = tuple(sorted([origin, dest]))
+                    if route_id in traffic_counts:
+                        traffic_counts[route_id] += 1
+
+                positions[drone] = dest
+
+            for drone, pos in positions.items():
+                if drone not in moving_drones:
+                    zone_counts[pos] += 1
+
+            zone_parts = []
+            for zone_name, count in zone_counts.items():
+                if count > 0:
+                    max_cap = self.game_map.zone_dict[zone_name].max_drones
+                    zone_parts.append(f"{zone_name}: {count}/{max_cap}")
+
+            link_parts = []
+            for route_id, count in traffic_counts.items():
+                if count > 0:
+                    route_name = f"{route_id[0]}-{route_id[1]}"
+                    max_cap = route_caps[route_id]
+                    link_parts.append(f"{route_name}: {count}/{max_cap}")
+
+            map_occupacy[turn_idx] = zone_parts + link_parts
+
+        map_occupacy[turn_idx + 1] = [f"{self.game_map.end_hub.name}: "
+                                      f"{self.game_map.nb_drones}/"
+                                      f"{self.game_map.nb_drones}"]
+
+        return map_occupacy

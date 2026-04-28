@@ -54,6 +54,20 @@ def main() -> None:
             print(f"Avg turns/drone: {analysis['flowtime']:.1f}")
             print(f"Total path cost: {analysis['total_cost']}")
 
+            print()
+            occupacy = evaluator.turn_occupacy()
+            for turn_idx, data_list in occupacy.items():
+                if data_list:
+                    output = []
+                    for element in data_list:
+                        name_part = element.split(':')[0]
+                        keyword = "Connection" if '-' in name_part else "Zone"
+                        output.append(f"[{keyword}] {element}")
+
+                    formatted_output = " | ".join(output)
+                    print(f"Turn {turn_idx}: {formatted_output}")
+            print()
+
         if args.visual:
             visualizer = Displayer(game_map, "output.txt")
             visualizer.display()

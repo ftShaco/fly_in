@@ -1,0 +1,6 @@
+D0-bottleneck
+D0-wide_area D1-bottleneck
+D0-goal D1-wide_area D2-bottleneck
+D1-goal D2-wide_area D3-bottleneck
+D2-goal D3-wide_area
+D3-goal

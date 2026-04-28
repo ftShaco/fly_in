@@ -118,6 +118,7 @@ def parse_map(config_file: str) -> GameMap:
                         raise ValueError(f"Corrupted map file, {base_part}."
                                          "\nUsage: 'nb_drones: <number>' ")
                     new_map.nb_drones = int(base_part[1])
+
                     if new_map.nb_drones < 1:
                         raise ValueError("Drone number need to be a positive "
                                          f"value: {base_part}")
@@ -256,6 +257,9 @@ def parse_map(config_file: str) -> GameMap:
         if not new_map.start_hub.connections or not \
                 new_map.end_hub.connections:
             raise ValueError("Corrupted map file: impossible to resolve")
+
+        if new_map.nb_drones < 1:
+            raise ValueError("You ommited number of drones, program won't run")
 
     except Exception as e:
         print(f"Error occured while loading the map.\n{e}")
